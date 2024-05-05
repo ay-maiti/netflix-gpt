@@ -2,8 +2,13 @@ import React, { useRef, useState } from 'react'
 import { checkEmail, checkPassword } from '../Utils/formValidation';
 import { auth } from '../Utils/firebase';
 import {createUserWithEmailAndPassword, signInWithEmailAndPassword} from "firebase/auth"
+import useAddUserToStore from '../Utils/useAddUserToStore';
+import {useNavigate } from 'react-router-dom';
+import Browse from './Browse';
 
 const Login = () => {
+    
+    const navigate = useNavigate()
     const [signUp, setSignUp] = useState(false);
     const [showNameError, setShowNameError] = useState(false);
     const [showEmailError, setShowEmailError] = useState(false);
@@ -18,10 +23,14 @@ const Login = () => {
         setShowNameError(false)
         setShowEmailError(false)
         setShowPasswordError(false)
+        setShowLoginError(false)
     }
     const heading = signUp?"Sign Up":"Sign In"
     const toggleText1 = signUp?"Already have an account?":"New to Netflix?"
     const toggleText2 = signUp?"Sign in now.":"Sign up now."
+    
+    
+    const handleUserAdd = useAddUserToStore();
     
     const handleSubmit = ()=>{
         if(showNameError || showEmailError || showPasswordError){
@@ -29,9 +38,9 @@ const Login = () => {
         }
         if(signUp){
             createUserWithEmailAndPassword(auth, email.current.value, password.current.value)
-                .then((userCredential) => {
-                    const user = userCredential.user;
-                    console.log(user)
+                .then(() => {
+                    handleUserAdd(name);
+                    navigate("/browse")
                 })
                 .catch((error) => {
                     const errorCode = error.code;
@@ -41,16 +50,15 @@ const Login = () => {
         }
         else{
             signInWithEmailAndPassword(auth, email.current.value, password.current.value)
-                .then((userCredential) => {
-                    // Signed in 
-                    const user = userCredential.user;
-                    console.log(user)
+                .then(() => {
                     setShowLoginError(false);
-                    // ...
+                    handleUserAdd(name);
+                    navigate("/browse")
                 })
                 .catch((error) => {
                     const errorCode = error.code;
                     const errorMessage = error.message;
+                    console.log(errorCode+" "+errorMessage)
                     setShowLoginError(true);
                 });
         }
@@ -77,7 +85,7 @@ const Login = () => {
                 <input ref={password} onBlur={()=>{setShowPasswordError(!checkPassword(password.current.value))}} className='w-[80%] my-2 mx-auto py-3 px-2 rounded-md bg-transparent border border-gray-500' type='password' placeholder='Password'/>
                 {showPasswordError && <p className='mx-[10%] text-red-700 text-sm mb-2'>❌ Your password must contain between 4 and 60 characters.</p>}
                 <button className='w-[80%] bg-red-700 my-3 py-1 mx-auto rounded-sm' onClick={handleSubmit}>{heading}</button>
-                {showLoginError && <p className='mx-[10%] text-red-700 text-sm mb-2'>❌ Invalid username.</p>}
+                {showLoginError && <p className='mx-[10%] text-red-700 text-sm mb-2'>❌ Invalid username or password.</p>}
                 <p className='ml-[10%]'>{toggleText1}  <b className='cursor-pointer' onClick={toggleSignUp}>{toggleText2}</b></p>
             </form>
         </div>
