@@ -1,0 +1,1 @@
+export const NOW_PLAYING_API = "https://api.themoviedb.org/3/movie/now_playing?language=hi-IN&page=1"

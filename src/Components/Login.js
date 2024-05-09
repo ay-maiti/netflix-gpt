@@ -4,7 +4,8 @@ import { auth } from '../Utils/firebase';
 import {createUserWithEmailAndPassword, signInWithEmailAndPassword} from "firebase/auth"
 import useAddUserToStore from '../Utils/useAddUserToStore';
 import {useNavigate } from 'react-router-dom';
-import Browse from './Browse';
+import Header from './Header';
+import { bg_login } from '../Utils/constants';
 
 const Login = () => {
     
@@ -65,14 +66,13 @@ const Login = () => {
     }    
   return (
     <div className=''>
+        <Header/>
         <div className='absolute brightness-50'>
             <img
                 className='w-[2121px] h-[1193px]'
                 alt="background"
-                src="https://assets.nflxext.com/ffe/siteui/vlv3/9f46b569-aff7-4975-9b8e-3212e4637f16/453ba2a1-6138-4e3c-9a06-b66f9a2832e4/IN-en-20240415-popsignuptwoweeks-perspective_alpha_website_small.jpg"
-                // {
-                //    "https://i.pinimg.com/originals/c6/1a/1b/c61a1b245b50439809a29937aa319889.jpg"
-                //     "https://assets.nflxext.com/ffe/siteui/vlv3/9f46b569-aff7-4975-9b8e-3212e4637f16/453ba2a1-6138-4e3c-9a06-b66f9a2832e4/IN-en-20240415-popsignuptwoweeks-perspective_alpha_website_small.jpg"}
+                src={bg_login}
+                
             />
         </div>
         <div className='absolute my-24 bg-black w-[450px] mx-auto left-0 right-0 bg-opacity-70 min-w-[25%]'>
