@@ -17,7 +17,7 @@ const Header = () => {
               if (user) {
                 console.log("firebase user", user)
                 navigate('/browse');
-             //   handleSignOut();
+               /// handleSignOut();
               } else {
                 navigate('/login')
               }
